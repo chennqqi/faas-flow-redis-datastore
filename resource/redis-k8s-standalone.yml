@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis
+spec:
+   replicas: 1
+   selector:
+     app: redis
+   template:
+     metadata:
+       labels:
+         app: redis
+     spec:
+       containers:
+       - name: redis
+         image: redis
+         resources:
+           requests:
+             cpu: 0.5              #限制cpu的数量为0.1个
+             memory: 32Mi      #限制内存为100M
+         ports:
+         - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  type: NodePort
+  ports:
+   - port: 6379
+     targetPort: 6379
+     #nodePort: 30003
+  selector:
+    app: redi
